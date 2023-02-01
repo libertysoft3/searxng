@@ -84,6 +84,16 @@ def request(query, params):
     lang = _get_language(params)
     age, btf = time_range_dict.get(params['time_range'], ('', ''))
 
+    # TODO if whitelist site search feature if enabled
+    domains = _get_whitelist_site_search_domains()
+    if domains:
+        query_addition = ''
+        for domain in domains:
+            query_addition += ' site: ' + domain + ' OR'
+        query_addition = query_addition[:-3]
+        query += query_addition
+        logger.debug("!!! whitelist site search query: %s", query)
+
     args = urlencode(
         {
             'p': query,
@@ -164,3 +174,34 @@ def _fetch_supported_languages(resp):
         supported_languages.append(val[offset:])
 
     return supported_languages
+
+# TODO make configurable and/or user specifiable
+# TODO show these in UI
+# errata: google has a 32 keyword limit or something
+def _get_whitelist_site_search_domains():
+    return [
+        'simplyrecipes.com',
+        'americastestkitchen.com',
+        'allrecipes.com',
+        'thespruceeats.com',
+        'tasteofhome.com',
+        'delish.com',
+        'food.com',
+        'cooking.nytimes.com',
+        'copykat.com',
+        'eatthis.com',
+        'weekendatthecottage.com',
+        'insanelygoodrecipes.com',
+        'yummly.com',
+        'easyhomemadesushi.com',
+        'foodnetwork.com',
+        'ichisushi.com',
+        'makemysushi.com',
+        'justonecookbook.com',
+        'fifteenspatulas.com',
+        'tastesbetterfromscratch.com',
+        'chilipeppermadness.com',
+        'dontwastethecrumbs.com',
+        'gettystewart.com',
+        'bonappetit.com'
+    ]
