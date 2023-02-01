@@ -89,7 +89,7 @@ def request(query, params):
     if domains:
         query_addition = ''
         for domain in domains:
-            query_addition += ' site: ' + domain + ' OR'
+            query_addition += ' site:' + domain + ' OR'
         query_addition = query_addition[:-3]
         query += query_addition
         logger.debug("!!! whitelist site search query: %s", query)
